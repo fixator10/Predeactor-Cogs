@@ -22,4 +22,4 @@ def setup(bot: Red):
         "have to setup everything again... yep.\n\nThanks for the person who contribued to the "
         "creation of Captcher and that helped me find the bugs."
     )
-    bot.send_to_owners(the_grand_final)
+    bot.loop.create_task(bot.send_to_owners(the_grand_final))
