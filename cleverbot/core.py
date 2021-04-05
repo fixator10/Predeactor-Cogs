@@ -97,7 +97,8 @@ class Core(commands.Cog):
 def apicheck():
     """
     Check for hidding commands if the API key is not registered.
-    Taken from https://github.com/PredaaA/predacogs/blob/master/nsfw/core.py#L200
+    Taken from
+    https://github.com/PredaaA/predacogs/blob/75a2d0e2561da8f3415e0859c9f540794e6a72b4/nsfw/core.py#L200
     """
 
     async def predicate(ctx: commands.Context):

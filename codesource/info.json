@@ -1,6 +1,9 @@
 {
     "$schema": "https://raw.githubusercontent.com/Cog-Creators/Red-DiscordBot/V3/develop/schema/red_cog.schema.json",
-    "author": ["Predeactor", "The person who gave me the eval originally."],
+    "author": [
+        "Predeactor",
+        "The person who gave me the eval originally."
+    ],
     "description": "Get source of commands.",
     "short": "Get source of commands.",
     "hidden": true,

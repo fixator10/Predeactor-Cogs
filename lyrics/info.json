@@ -1,6 +1,8 @@
 {
     "$schema": "https://raw.githubusercontent.com/Cog-Creators/Red-DiscordBot/V3/develop/schema/red_cog.schema.json",
-    "author": ["Predeactor"],
+    "author": [
+        "Predeactor"
+    ],
     "requirements": [
         "ksoftapi"
     ],

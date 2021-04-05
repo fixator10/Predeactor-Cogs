@@ -1,6 +1,8 @@
 {
     "$schema": "https://raw.githubusercontent.com/Cog-Creators/Red-DiscordBot/V3/develop/schema/red_cog.schema.json",
-    "author": ["Predeactor"],
+    "author": [
+        "Predeactor"
+    ],
     "description": "Obtain one of the most beautiful image representing Hatsune Miku!",
     "short": "Obtain a random image of Miku.",
     "install_msg": "Hey, thank for using my API! If you encouter **any problems**, even from the API, please contact me, `Capitaine Predeactor#0495`, I'll do my best to fix it.\n\n**Note:** By using this API, the IP of your bot may be logged in order to use this API, this is for ratelimiting/logging purpose only.",

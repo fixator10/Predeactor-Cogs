@@ -26,7 +26,7 @@ BOT_SONG_RE = re.compile(
     ),
     flags=re.I,
 )
-# https://github.com/TheWyn/Wyn-RedV3Cogs/blob/master/lyrics/lyrics.py#L10
+# https://github.com/TheWyn/Wyn-RedV3Cogs/blob/fbd7ea3cfbd53dc27f50d43cf884041ab1b5bafc/lyrics/lyrics.py#L10
 
 
 class Lyrics(commands.Cog):

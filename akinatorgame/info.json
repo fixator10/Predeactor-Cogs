@@ -1,6 +1,9 @@
 {
     "$schema": "https://raw.githubusercontent.com/Cog-Creators/Red-DiscordBot/V3/develop/schema/red_cog.schema.json",
-    "author": ["Predeactor", "A bit of everyone who helped"],
+    "author": [
+        "Predeactor",
+        "A bit of everyone who helped"
+    ],
     "end_user_data_statement": "This cog does not save data about users persistently.",
     "short": "Akinator will guess a real or fictitious character by answering questions.",
     "description": "Akinator, the genius, will read in your mind and guess who you are thinking of! Answer Akinator's questions and get impressed by his talent!",

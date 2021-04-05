@@ -18,7 +18,7 @@ assignees: ''
 
 ### Versions and infos:
  - Red Version:
- - Discord.py Version: 
+ - Discord.py Version:
 
 ## Logs/Traceback:
 <!---You should have receive a traceback with your error, remove this section if not. -->
