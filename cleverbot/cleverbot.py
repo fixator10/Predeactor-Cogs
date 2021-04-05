@@ -58,6 +58,8 @@ class CleverBot(Core):
     @commands.Cog.listener()
     async def on_message(self, message: discord.Message):
         """The CleverBot listener that will send a message in case a user is in a conversation."""
+        if await self.bot.cog_disabled_in_guild(self, message.guild):
+            return
         ctx = await self.bot.get_context(message)
 
         # If user is not using conversation

@@ -773,6 +773,9 @@ class CustomCooldown(commands.Cog):
         if not message.guild:
             return
 
+        if await self.bot.cog_disabled_in_guild(self, message.guild):
+            return
+
         data = await self.config.guild(message.guild).all()
 
         if data["ignore_bot"] and message.author.bot:

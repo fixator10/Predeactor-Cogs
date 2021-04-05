@@ -142,6 +142,8 @@ class Captcha(
         """
         if member.bot:
             return False
+        if await self.bot.cog_disabled_in_guild(self, member.guild):
+            return False
         return await self.data.guild(member.guild).enabled()
 
     async def create_challenge_for(self, member: discord.Member) -> Challenge:
