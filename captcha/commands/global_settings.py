@@ -37,6 +37,7 @@ class OwnerCommands(MixinMeta, metaclass=ABCMeta):
             return
         if logging_level < 0:
             await ctx.send("The logging level cannot be less than 0.")
+            return
         value = getattr(LoggingLevels, "Lvl" + str(logging_level)).value
         await self.data.log_level.set(logging_level * 10)
         await ctx.send(
