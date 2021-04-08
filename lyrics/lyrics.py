@@ -32,7 +32,7 @@ BOT_SONG_RE = re.compile(
 class Lyrics(commands.Cog):
 
     __author__ = ["Predeactor"]
-    __version__ = "v2"
+    __version__ = "v2.0.1"
 
     def __init__(self, bot, *args, **kwargs):
         super().__init__(*args, **kwargs)
