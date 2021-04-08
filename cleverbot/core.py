@@ -83,12 +83,13 @@ class Core(commands.Cog):
         To set the API key:
         1. Go to [this server](https://discord.gg/s4fNByu).
         2. Go to #playground and use `> api`.
-        3. Say yes and follow instructions.
+        3. Say yes and follow instructions. Please include this is a Redbot instance.
         4. When you receive your key, use this command again with your API key.
         """
         message = (
             "To set the API key:\n1. Go to [this server](https://discord.gg/s4fNByu).\n"
-            "2. Go to #playground and use `> api`.\n3. Say yes and follow instructions.\n"
+            "2. Go to #playground and use `> api`.\n3. Say yes and follow instructions. "
+            "It would be nice of you if you indicate this is a Redbot you're hosting.\n"
             "3. Use `[p]set api travitia api_key <Your token>` "
         )
         await ctx.send(message)
