@@ -6,7 +6,7 @@
     "end_user_data_statement": "This cog does not save data about users persistently.",
     "description": "A free cog for talking to Cleverbot!",
     "short": "Talk to Cleverbot in Discord.",
-    "install_msg": "Hello! Thank for adding my CleverBot cog! To start using this cog, use `[p]travaitiaapikey`.",
+    "install_msg": "Hello! Thank for adding my CleverBot cog! To start using this cog, use `[p]travitiaapikey`.",
     "requirements": [
         "async_cleverbot"
     ],
