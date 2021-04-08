@@ -129,6 +129,8 @@ class Lyrics(commands.Cog):
         return available_musics[chosen_music]
 
     async def determine_music_source(self, ctx: commands.Context, song_str: Optional[str]):
+        if isinstance(ctx.channel, discord.DMChannel):
+            return song_str
         try:
             player = lavalink.get_player(ctx.guild.id)
         except (KeyError, IndexError):
