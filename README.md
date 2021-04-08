@@ -23,7 +23,7 @@ This is a repo made for [Red](https://github.com/Cog-Creators/Red-DiscordBot).
 | CustomCooldown  | Custom slowmode/cooldown moderated by the bot itself.                                    | v1.3.3      |
 | LeaderBoard     | Global reputation system using points.                                                   | v1.0.2      |
 | Letters         | Send letters to persons over Discord, not meant for spam purpose.                        | v0          |
-| Lyrics          | Get lyrics of a music through KSoft.Si.                                                  | v2          |
+| Lyrics          | Get lyrics of a music through KSoft.Si.                                                  | v2.0.1      |
 | Miku            | Return a random image from https://mikuapi.predeactor.net                                | v1.0.1      |
 | SXCU            | Shorten your link, upload your images through a custom subdomain and more in the future. | Beta v0.4   |
 
