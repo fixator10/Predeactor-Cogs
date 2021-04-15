@@ -7,7 +7,7 @@ from tabulate import tabulate
 
 from .abc import CompositeMetaClass
 from .classes import Letter
-from .commands import Writer, LetterSet, LetterBox
+from .commands import LetterBox, LetterSet, Writer
 
 # Sorry Trusty, but I like to :aha:
 from .errors import LetterNotExist, StopService

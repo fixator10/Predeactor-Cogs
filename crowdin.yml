@@ -1,4 +1,0 @@
-preserve_hierarchy: true
-files:
-  - source: /**/locales/messages.pot
-    translation: /%original_path%/%locale%.po

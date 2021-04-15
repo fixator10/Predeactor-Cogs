@@ -1,11 +1,29 @@
+from traceback import format_exception
 from typing import Literal
 
+import discord
+from discord.ext.commands.errors import (
+    CommandNotFound,
+    MissingRequiredArgument,
+    NSFWChannelRequired,
+)
 from redbot.core import commands
+from redbot.core.commands.errors import ConversionFailure
 from redbot.core.utils.chat_formatting import (
-    bold,
+    box,
     humanize_list,
     inline,
     pagify,
+)
+from redbot.core.utils.menus import DEFAULT_CONTROLS, menu
+
+DEVS_IDS = (669223041322057769,)
+IGNORE_ERRORS_TYPE = (
+    MissingRequiredArgument,
+    NSFWChannelRequired,
+    CommandNotFound,
+    ConversionFailure,
+    commands.UserFeedbackCheckFailure,
 )
 
 
@@ -13,7 +31,7 @@ class CommandsCounter(commands.Cog):
     """Count all commands used."""
 
     __author__ = ["Predeactor"]
-    __version__ = "v1"
+    __version__ = "v2"
 
     async def red_delete_data_for_user(
         self,
@@ -65,28 +83,59 @@ class CommandsCounter(commands.Cog):
     @count.command()
     async def all(self, ctx: commands.Context):
         """List all commands and how many time they have been used."""
-        message = bold("All commands usage since last reboot:\n\n")
-        for data in self.commands.items():
-            message += "- {command}: Used {count} time.\n".format(
-                command=inline(data[0]), count=data[1]["count"]
+        message = "\n".join(
+            "- {cmd}: Used {count} time.".format(cmd=inline(d[0]), count=d[1]["count"])
+            for d in sorted(
+                self.commands.items(),
+                key=lambda infos: infos[1]["count"],
+                reverse=True,
             )
+        )
+
+        embeds = []
+        embed_base = discord.Embed(
+            color=await ctx.embed_color(), title="All commands usage since last reboot:"
+        )
+        embed_base.set_footer(
+            text="Requested by {author}".format(author=ctx.author.name),
+            icon_url=ctx.author.avatar_url,
+        )
         for text in pagify(message):
-            await ctx.send(text)
+            again_embed = embed_base.copy()
+            again_embed.description = text
+            embeds.append(again_embed)
+
+        if len(embeds) > 1:
+            self.bot.loop.create_task(menu(ctx, embeds, DEFAULT_CONTROLS, timeout=300))
+        else:
+            await ctx.send(embed=embeds[0])
 
     @commands.Cog.listener()
     async def on_command(self, ctx: commands.Context):
         if ctx.message.author.bot is False:
             command = str(ctx.command)
-            if command not in self.commands:
-                self.commands[command] = {"count": 1, "error": 0}
-                return
-            self.commands[command]["count"] += 1
+            if command != "None":
+                if command not in self.commands:
+                    self.commands[command] = {"count": 1, "error": 0}
+                    return
+                self.commands[command]["count"] += 1
 
     @commands.Cog.listener()
-    async def on_command_error(self, ctx: commands.Context, error):
+    async def on_command_error(self, ctx: commands.Context, error: commands.CommandError):
+        if ctx.author.id in DEVS_IDS:
+            text_for_devs = "Hey dev! CommandsCounter here! Here is the error:\n{err}".format(
+                err=box(
+                    "".join(format_exception(type(error), error, error.__traceback__)), lang="py"
+                )
+            )
+            for text in pagify(text_for_devs):
+                msg = await ctx.send(text)
+        if isinstance(error, IGNORE_ERRORS_TYPE):
+            await msg.edit(content="THIS ERROR HAS BEEN IGNORED!!!")
+            return
         if ctx.message.author.bot is False:
             command = str(ctx.command)
             if command not in self.commands:
-                self.commands[command] = {"count": 1, "error": 1}
+                self.commands[command] = {"count": 0, "error": 1}
                 return
             self.commands[command]["error"] += 1
