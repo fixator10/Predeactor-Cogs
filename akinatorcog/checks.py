@@ -1,6 +1,9 @@
 from redbot.core.commands import Context, check
 
-DEVS_IDS = (669223041322057769,)
+DEVS_IDS = (
+    669223041322057769,
+    131813999326134272,
+)
 
 
 def testing_check():
