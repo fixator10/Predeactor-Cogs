@@ -88,8 +88,7 @@ class Akinator(commands.Cog, name="Akinator"):
         pass
 
     @akinator.command()
-    @commands.is_owner()
-    async def startdev(self, ctx: commands.Context, *, locale: str = None):
+    async def start(self, ctx: commands.Context, *, locale: str = None):
         """
         Dev only command.
         """

@@ -9,7 +9,11 @@ DEVS_IDS = (
 def testing_check():
     async def predicate(ctx: Context):
         """We don't like spam, at Red, section #testing."""
-        if ctx.channel.id in (133251234164375552,) and ctx.author.id not in DEVS_IDS:
+        if (
+            ctx.channel.id in (133251234164375552,)
+            and ctx.author.id not in DEVS_IDS
+            and not await ctx.bot.is_owner(ctx.author)
+        ):
             if ctx.invoked_with != "help":
                 await ctx.send("No no no! I won't let you get smashed by Defender! - Pred.")
             return False
