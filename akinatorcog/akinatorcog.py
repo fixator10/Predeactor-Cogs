@@ -90,7 +90,7 @@ class Akinator(commands.Cog, name="Akinator"):
     @akinator.command()
     async def start(self, ctx: commands.Context, *, locale: str = None):
         """
-        Dev only command.
+        Start a session with Akinator.
         """
         await ctx.send(NOTICE)
         locale = await self.ask_for_locale(ctx, locale)
@@ -160,7 +160,9 @@ class Akinator(commands.Cog, name="Akinator"):
         question_count = 1
         while need_questions or max_question == question_count:
             user_input = await self.send_and_ask_question(
-                self.ongoing_games[ctx.author.id], question_count, next_question
+                self.ongoing_games[ctx.author.id],
+                question_count,
+                _(f"Question {question_count}: {next_question}"),
             )
             # We technically should have something correct
             try:
