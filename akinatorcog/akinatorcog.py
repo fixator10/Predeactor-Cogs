@@ -162,7 +162,9 @@ class Akinator(commands.Cog, name="Akinator"):
             user_input = await self.send_and_ask_question(
                 self.ongoing_games[ctx.author.id],
                 question_count,
-                _(f"Question {question_count}: {next_question}"),
+                _("Question {count}: {question}").format(
+                    count=question_count, question=next_question
+                ),
             )
             # We technically should have something correct
             try:

@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2021-03-08 18:35+0100\n"
+"POT-Creation-Date: 2021-04-17 01:02+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -11,7 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: redgettext 3.3\n"
 
-#: akinatorgame\akinatorcog.py:36
+#: akinatorcog.py:61
 #, docstring
 msgid ""
 "\n"
@@ -19,7 +19,16 @@ msgid ""
 "    "
 msgstr ""
 
-#: akinatorgame\akinatorcog.py:60
+#: akinatorcog.py:71
+#, docstring
+msgid ""
+"\n"
+"        This will put some text at the top of the main help. ([p]help Akinator)\n"
+"        Thank to Sinbad.\n"
+"        "
+msgstr ""
+
+#: akinatorcog.py:85
 #, docstring
 msgid ""
 "\n"
@@ -27,32 +36,41 @@ msgid ""
 "        "
 msgstr ""
 
-#: akinatorgame\akinatorcog.py:66
+#: akinatorcog.py:92
 #, docstring
 msgid ""
 "\n"
-"        Begin a game session with Aikanator.\n"
-"\n"
-"        To answer a question, you can use the following terms:\n"
-"        - \"yes\" OR \"y\" OR \"0\" for answering \"Yes\".\n"
-"        - \"no\" OR \"n\" OR \"1\" for answer \"No\".\n"
-"        - \"i\" OR \"idk\" OR \"i dont know\" OR \"i don't know\" OR \"2\" for answer \"I don't know\".\n"
-"        - \"probably\" OR \"p\" OR \"3\" for answering \"Probably\".\n"
-"        - \"probably not\" OR \"pn\" OR \"4\" for answering \"Probably not\".\n"
-"\n"
-"        You can also say \"b\" or \"back\" to change your last question.\n"
+"        Start a session with Akinator.\n"
 "        "
 msgstr ""
 
-#: akinatorgame\akinatorcog.py:80
-msgid "Are you ready to answer Akinator's questions? (y/n)"
+#: akinatorcog.py:108
+#, docstring
+msgid "Cancel your game with Akinator."
 msgstr ""
 
-#: akinatorgame\akinatorcog.py:87
-msgid "See you later then! 👋"
+#: akinatorcog.py:110
+msgid "You're not running any game!"
 msgstr ""
 
-#: akinatorgame\akinatorcog.py:92
+#: akinatorcog.py:165
+msgid "Question {count}: {question}"
+msgstr ""
+
+#: akinatorcog.py:241
+msgid "Hmm... I think I've guessed..."
+msgstr ""
+
+#: akinatorcog.py:242
+msgid "Is it {name}? Did I win? The description is {desc}."
+msgstr ""
+
+#: akinatorcog.py:251
+msgid ""
+"Game running for {name}. I asked over {num} questions! (Cog version {ver})"
+msgstr ""
+
+#: akinatorcog.py:261
 msgid ""
 "Do you wish to set a specific language? If so, please specify it now (Find "
 "all available language at "
@@ -60,62 +78,11 @@ msgid ""
 "'no'."
 msgstr ""
 
-#: akinatorgame\akinatorcog.py:103
+#: akinatorcog.py:274
 msgid "You didn't answered in time... 😔"
 msgstr ""
 
-#: akinatorgame\akinatorcog.py:116
+#: checks.py:11
 #, docstring
-msgid "Cancel your game with Akinator."
-msgstr ""
-
-#: akinatorgame\akinatorcog.py:118
-msgid "You're not running any game!"
-msgstr ""
-
-#: akinatorgame\akinatorcog.py:138
-msgid "Question"
-msgstr ""
-
-#: akinatorgame\akinatorcog.py:189
-msgid "Invalid language! Be sure it's written correctly."
-msgstr ""
-
-#: akinatorgame\akinatorcog.py:202
-msgid "This is the end of the game."
-msgstr ""
-
-#: akinatorgame\akinatorcog.py:213
-msgid "An unexpected error happened."
-msgstr ""
-
-#: akinatorgame\akinatorcog.py:225
-msgid "Cannot go back any further! You will have to answer my question."
-msgstr ""
-
-#: akinatorgame\akinatorcog.py:237
-msgid "I hope I won then, at least. 😩"
-msgstr ""
-
-#: akinatorgame\akinatorcog.py:240
-msgid "I won! I'm so glad I guessed your mind!"
-msgstr ""
-
-#: akinatorgame\akinatorcog.py:243
-msgid ""
-"Awh, that's bad... But feel free to ask me for another person, I don't mind "
-"you."
-msgstr ""
-
-#: akinatorgame\akinatorcog.py:249
-msgid "Hmm... I think I've guessed..."
-msgstr ""
-
-#: akinatorgame\akinatorcog.py:250
-msgid "Is it {name}? The description is {desc}."
-msgstr ""
-
-#: akinatorgame\akinatorcog.py:260
-msgid ""
-"Game running for {name}. I asked over {num} questions! (Cog version {ver})"
+msgid "We don't like spam, at Red, section #testing."
 msgstr ""
