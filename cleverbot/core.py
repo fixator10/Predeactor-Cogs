@@ -1,3 +1,5 @@
+from discord import Embed
+from random import choice
 from typing import Literal, Mapping, Optional
 
 from redbot.core import checks, commands
@@ -12,7 +14,7 @@ seems_ok = None
 class Core(commands.Cog):
 
     __author__ = ["Predeactor"]
-    __version__ = "v1.0.7"
+    __version__ = "v1.2"
 
     async def red_delete_data_for_user(
         self,
@@ -58,9 +60,9 @@ class Core(commands.Cog):
         return ac.Cleverbot(await self._get_api_key())
 
     @staticmethod
-    async def ask_question(session, question: str, user_id: Optional[int] = None):
+    async def ask_question(session, question: str, user_id: int):
         try:
-            answer = await session.ask(question, user_id if user_id is not None else "00")
+            answer = await session.ask(user_id, question)
             answered = True
         except Exception as e:
             answer = "An error happened: {error}\nPlease try again later. Session closed.".format(
@@ -69,30 +71,59 @@ class Core(commands.Cog):
             answered = False
         return answer, answered
 
-    @staticmethod
-    def _message_by_timeout():
-        return "I have closed the conversation since I had no answers."
-
     # Commands for settings
 
-    @checks.is_owner()
+    @commands.is_owner()
+    @commands.has_permissions(embed_links=True)
     @commands.command()
-    async def travitiaapikey(self, ctx: commands.Context, *, api_key: str):
-        """Set the API key for Travitia API.
+    async def travitiaapikey(self, ctx: commands.Context):
+        """Gives instructions for obtaining the API key for Travitia API.
 
-        To set the API key:
-        1. Go to [this server](https://discord.gg/s4fNByu).
-        2. Go to #playground and use `> api`.
-        3. Say yes and follow instructions. Please include this is a Redbot instance.
-        4. When you receive your key, use this command again with your API key.
+        Thanks to Rhodz for agreeing using Purpose's lyrics
+        Nice easter egg, uhm? :)
         """
-        message = (
-            "To set the API key:\n1. Go to [this server](https://discord.gg/s4fNByu).\n"
-            "2. Go to #playground and use `> api`.\n3. Say yes and follow instructions. "
-            "It would be nice of you if you indicate this is a Redbot you're hosting.\n"
-            "3. Use `[p]set api travitia api_key <Your token>` "
+        purpose = [
+            "Have you ever seen the sky falling\nOpen up your tired eyes, keep watching\nYou don't always have to shine the brightest\nWhat you need is the fight to be",
+            "'Cause when you fight your fears\nYou're pushing on cause only time reveals\nYou're working days until the nights are real\nYou gotta be free\nLive free",
+            "You better run towards the sun\nChase what you know\nTrust in your heart\nWe'll make it home\nRun towards the sun\nChase what you know\nTrust in your heart\nWe'll make it home",
+            "You wanna get out\nYou want more to see\nAll this you've been dreaming of\nGet lost in the sound\nAnd you will be free",
+            "'Cause when you fight your fears\nYou're pushing on cause only time reveals\nYou're working days until the nights are real\nYou gotta be free\nLive free",
+            "You better run towards the sun\nChase what you know\nTrust in your heart\nWe'll make it home\nRun towards the sun\nChase what you know\nTrust in your heart\nWe'll make it home",
+            "You know it\nYou know it all\nYou know it\nYou give me purpose",
+        ]
+        embed = Embed(
+            color=await ctx.embed_colour(),
+            title="Obtaining your API key for Travitia.",
+            description=choice(purpose),
         )
-        await ctx.send(message)
+
+        embed.add_field(
+            name="Step 1",
+            value="Join the Travitia server: https://discord.gg/s4fNByu",
+            inline=False,
+        )
+        embed.add_field(name="Step 2", value="Go to #playground and use `> api`.", inline=False)
+        embed.add_field(
+            name="Step 3",
+            value=(
+                "Follow bot's instruction, please add you're using a redbot and Predeactor's cog."
+            ),
+            inline=False,
+        )
+        embed.add_field(
+            name="Step 4",
+            value="Use `[p]set api travitia api_key <Your token>`.\nYou can now use Cleverbot.",
+            inline=False,
+        )
+        embed.add_field(
+            name="Note",
+            value="We have life, Adrian (Host of Cleverbot's API) doesn't have all of his time just for this API, so don't ask him when he will approve you. PLEASE!",
+            inline=False,
+        )
+
+        embed.set_footer(text="Purpose - Rhodz", icon_url="https://i.imgur.com/1EiuQLS.png")
+
+        await ctx.send(embed=embed)
 
 
 def apicheck():

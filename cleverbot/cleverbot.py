@@ -1,8 +1,8 @@
+import asyncio
 import logging
-from datetime import datetime
 
-import discord
 from redbot.core import commands
+from redbot.core.utils.predicates import MessagePredicate
 
 from .core import Core, apicheck
 
@@ -36,18 +36,17 @@ class CleverBot(Core):
         """Start a conversation with Cleverbot
         You don't need to use a prefix or the command using this mode."""
 
-        if str(ctx.author.id) in self.conversation:
-            await ctx.send("There's already a conversation running. Say `close` to " "stop it.")
+        if ctx.author.id in self.conversation:
+            await ctx.send("There's already a conversation running. Say `close` to stop it.")
             return
 
         session = await self._make_cleverbot_session()
-        data = {
+        self.conversation[ctx.author.id] = {
             "session": session,
-            "channel": ctx.channel.id,
-            "timer": datetime.now(),
-            "typing": False,
+            "task": None,
         }
-        self.conversation[str(ctx.author.id)] = data
+
+        # Handled when the cog is restarted/unloaded, which we will let the user know.
 
         await ctx.send(
             "Starting a new Cleverbot session!\n\nSay `close` to stop the conversation"
@@ -55,53 +54,44 @@ class CleverBot(Core):
             " receive no answer.\nThis conversation is only available in this channel."
         )
 
-    @commands.Cog.listener()
-    async def on_message(self, message: discord.Message):
-        """The CleverBot listener that will send a message in case a user is in a conversation."""
-        if await self.bot.cog_disabled_in_guild(self, message.guild):
-            return
-        ctx = await self.bot.get_context(message)
+        prefixes = tuple(await self.bot.get_valid_prefixes())
 
-        # If user is not using conversation
-        if str(ctx.author.id) not in self.conversation:
-            return
-        session = self.conversation[str(ctx.author.id)]["session"]
-        timer = self.conversation[str(ctx.author.id)]["timer"]
-        channel = self.conversation[str(ctx.author.id)]["channel"]
-        # If the timer is exceeded.
-        if (datetime.now() - timer).seconds > 300:
-            channel = self.bot.get_channel(channel)
-            await channel.send(self._message_by_timeout())
-            await session.close()
-            del self.conversation[str(ctx.author.id)]
-            return
-        # If message is not in the good channel
-        if ctx.channel.id is not channel:
-            return
-        # If bot is typing
-        if self.conversation[str(ctx.author.id)]["typing"]:
-            return
-        # If the string start with a prefix
-        if message.content.startswith(tuple(await self.bot.get_valid_prefixes())):
-            return
-        # If user is closing
-        if message.content.lower() == "close":
-            await session.close()
-            del self.conversation[str(ctx.author.id)]
-            await ctx.send("Session closed!")
-            return
-        # if all checks pass
-        async with ctx.typing():
-            self.conversation[str(ctx.author.id)]["typing"] = True
-            answer, answered = await self.ask_question(session, message.content, ctx.author.id)
-            if answered:
-                message = "{user}, {answer}".format(user=ctx.author.mention, answer=answer)
-                self.conversation[str(ctx.author.id)]["timer"] = datetime.now()
-                exiting = False
-            else:
-                message = answer
-                exiting = True
-            await ctx.send(message)
-            self.conversation[str(ctx.author.id)]["typing"] = False
-            if exiting:
-                await session.close()
+        try:
+            while True:
+                self.conversation[ctx.author.id]["task"] = task = asyncio.Task(
+                    self.bot.wait_for(
+                        "message", check=MessagePredicate.same_context(ctx), timeout=300
+                    )
+                )
+                try:
+                    message = await task.get_coro()  # Wait for user message...
+                except asyncio.TimeoutError:
+                    await ctx.send(
+                        "You haven't answered me! \N{PENSIVE FACE}\nI'm closing our session..."
+                    )
+                    break
+                except asyncio.CancelledError:
+                    await ctx.send("Our session has been cancelled due to cog unload! Closing...")
+                    break
+                if message.content.startswith(prefixes):
+                    continue
+                if message.content.lower() in ("close", "c"):
+                    await ctx.send("Alright, bye then. \N{WAVING HAND SIGN}")
+                    break
+                async with ctx.typing():
+                    answer, answered = await self.ask_question(
+                        session, message.content, message.author.id
+                    )
+                await message.reply(answer)
+                if not answered:
+                    break
+                continue
+        finally:
+            await self.conversation[ctx.author.id]["session"].close()
+            del self.conversation[ctx.author.id]
+
+    def cog_unload(self):
+        for session in self.conversation.values():
+            if session["task"]:
+                session["task"].cancel()
+                # The session is closed automatically by the 'finally" block at the end of the cmd

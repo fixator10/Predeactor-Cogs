@@ -24,7 +24,10 @@ SOFTWARE.
 
 from enum import Enum
 
-import aiohttp
+from aiohttp import ClientSession, ContentTypeError
+
+
+API_URL = "https://public-api.travitia.xyz/talk"
 
 
 class Emotion(Enum):
@@ -56,20 +59,30 @@ class DictContext:
     def __init__(self):
         self._storage = {}
 
-    def update_context(self, id_, query):
-        """Pushes data to the Context."""
-        try:
-            ctx = self._storage[id_]
-        except KeyError:
-            li_temp = [query]
-            self._storage[id_] = li_temp
-            return dict(text=query)
-        else:
-            self._storage[id_].append(query)
-            if len(self._storage[id_]) > 2:
-                self._storage[id_].pop(0)
-                return dict(text=query, context=ctx)
-        return dict(text=query)
+    def update_context(self, id_: int, to_append: str):
+        """Pushes data to the Context.
+
+        If the context will contain more than 2 queries, the oldest query will be automatically
+        deleted since this is an API limitation.
+        """
+        if id_ not in self._storage:
+            self._storage[id_] = [to_append]
+        ctx = self._storage[id_]
+        ctx.append(to_append)
+        if len(self._storage[id_]) > 2:
+            # Remove first query
+            ctx.pop(0)
+
+    def get_query_for_api(self, id_: int, query: str):
+        """
+        Return a dict with the context and query.
+        """
+        if id_ not in self._storage:
+            self._storage[id_] = []
+        ctx = {"text": query}
+        if self._storage[id_]:
+            ctx["context"] = self._storage[id_]
+        return ctx
 
 
 class Response:
@@ -97,40 +110,27 @@ class Response:
 class Cleverbot:
     """The client to use for API interactions."""
 
-    def __init__(
-        self, api_key: str, session: aiohttp.ClientSession = None, context: DictContext = None
-    ):
-        self.context = context or None
-        self.session = session or None
-        self.api_key = api_key  # API key for the Cleverbot API
-        self.api_url = "https://public-api.travitia.xyz/talk"  # URL for requests
-        if session and not isinstance(session, aiohttp.ClientSession):
-            raise TypeError("Session must be an aiohttp.ClientSession.")
-        if context:
-            self.set_context(context)
-
-    def set_context(self, context: DictContext):
-        """Sets the Cleverbot's context to an instance of DictContext."""
+    def __init__(self, api_key: str, session: ClientSession = None, context: DictContext = None):
         if not isinstance(context, DictContext):
-            raise TypeError("Context passed was not an instance of DictContext.")
+            context = DictContext()
         self.context = context
+        self.session = session if isinstance(session, ClientSession) else ClientSession()
+        self.api_key = api_key  # API key for the Cleverbot API
 
-    async def ask(self, query: str, id_=None, *, emotion: Emotion = Emotion.neutral):
+    async def ask(self, id_: int, query: str, *, emotion: Emotion = Emotion.neutral):
         """Queries the Cleverbot API."""
-        if not self.session:
-            self.session = aiohttp.ClientSession()  # Session for requests
-        if not isinstance(emotion, Emotion):
-            raise ValueError("emotion must be an enum of async_cleverbot.Emotion.")
-        if isinstance(self.context, DictContext):
-            ctx = self.context.update_context(id_, query)
-        else:
-            ctx = dict(text=query)
-        ctx["emotion"] = emotion.value
-        headers = dict(authorization=self.api_key)
-        async with self.session.post(self.api_url, data=ctx, headers=headers) as req:
+
+        ctx = self.context.get_query_for_api(id_, query)
+        self.context.update_context(id_, query)
+
+        ctx["emotion"] = emotion.value if isinstance(emotion, Emotion) else Emotion.neutral.value
+
+        async with self.session.post(
+            API_URL, data=ctx, headers={"authorization": self.api_key}
+        ) as req:
             try:
                 resp = await req.json()
-            except aiohttp.ContentTypeError:
+            except ContentTypeError:
                 raise APIDown(
                     "The API is currently not working. Please wait while the devs fix it."
                 )
@@ -146,6 +146,6 @@ class Cleverbot:
         return Response.from_raw(resp)
 
     async def close(self):
-        """Closes the aiohttp session."""
+        """Closes the session."""
         if self.session:
             await self.session.close()

@@ -11,17 +11,6 @@ class CodeSource(commands.Cog):
         self.bot = bot
         super().__init__()
 
-    async def red_delete_data_for_user(
-        self,
-        *,
-        requester: Literal["discord_deleted_user", "owner", "user", "user_strict"],
-        user_id: int,
-    ):
-        """
-        Nothing to delete...
-        """
-        pass
-
     @commands.command(aliases=["sourcecode", "source", "code"])
     @commands.bot_has_permissions(embed_links=True)
     @commands.is_owner()
@@ -47,3 +36,14 @@ class CodeSource(commands.Cog):
         pages = [f"Page {i}/{max_i}\n" + page for i, page in enumerate(temp_pages, start=1)]
 
         await menu(ctx, pages, controls=DEFAULT_CONTROLS)
+
+    async def red_delete_data_for_user(
+        self,
+        *,
+        requester: Literal["discord_deleted_user", "owner", "user", "user_strict"],
+        user_id: int,
+    ):
+        """
+        Nothing to delete...
+        """
+        pass

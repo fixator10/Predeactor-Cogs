@@ -18,7 +18,7 @@ This is a repo made for [Red](https://github.com/Cog-Creators/Red-DiscordBot).
 | --------------- | ---------------------------------------------------------------------------------------- | ----------- |
 | Akinator        | A genius right in your bot, ready to discover yourself.                                  | Beta v0.8   |
 | Captcha         | A Captcha defensive system. to challenge the new users                                   | v1.0.2      |
-| CleverBot       | Talk or ask a question to CleverBot for free.                                            | v1.0.7      |
+| CleverBot       | Talk or ask a question to CleverBot for free.                                            | v1.2        |
 | CommandsCounter | Know how many time a command has been used super easily.                                 | v2          |
 | CustomCooldown  | Custom slowmode/cooldown moderated by the bot itself.                                    | v1.3.3      |
 | LeaderBoard     | Global reputation system using points.                                                   | v1.0.2      |

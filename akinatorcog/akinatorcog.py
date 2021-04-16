@@ -177,6 +177,7 @@ class Akinator(commands.Cog, name="Akinator"):
                         question_count += 1
             except AkiNoQuestions:
                 await ctx.send("Oops! Reached 80 questions! That's an issue! Trying to win...")
+                await akinator.back()
                 break
         return question_count
 
